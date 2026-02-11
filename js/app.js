@@ -64,7 +64,17 @@ async function loadDate(idx) {
   document.getElementById('table-container').innerHTML =
     '<p class="loading">데이터 로딩 중...</p>';
 
-  currentData = await fetchDaily(date);
+  try {
+    currentData = await fetchDaily(date);
+  } catch (e) {
+    console.error('fetchDaily error:', e);
+  }
+
+  if (!currentData) {
+    document.getElementById('table-container').innerHTML =
+      `<p class="no-data">${date} 데이터를 불러올 수 없습니다.</p>`;
+    return;
+  }
 
   // 최근 데이터 로드 (히스토리용)
   const recentDates = dates.slice(idx, idx + 10);
