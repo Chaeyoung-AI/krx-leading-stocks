@@ -1,0 +1,41 @@
+name: Fetch Daily KRX Data
+
+on:
+  schedule:
+    # 매주 월~금 18:30 KST (09:30 UTC)
+    - cron: '30 9 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch daily data
+        run: python scripts/fetch_daily.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "No new data to commit"
+          else
+            DATE=$(date +%Y-%m-%d)
+            git commit -m "data: ${DATE} 거래대금 상위종목 업데이트"
+            git push
+          fi
