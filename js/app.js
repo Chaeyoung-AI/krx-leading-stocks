@@ -14,24 +14,30 @@ let currentData = null;
 let recentData = [];
 
 async function init() {
-  // 날짜 목록 로드
-  const index = await fetchIndex();
-  dates = index.dates || [];
+  try {
+    // 날짜 목록 로드
+    const index = await fetchIndex();
+    dates = index.dates || [];
 
-  if (dates.length === 0) {
+    if (dates.length === 0) {
+      document.getElementById('table-container').innerHTML =
+        '<p class="no-data">데이터가 없습니다. GitHub Actions가 실행되면 데이터가 추가됩니다.</p>';
+      return;
+    }
+
+    // 날짜 드롭다운 구성
+    buildDateSelector();
+
+    // 최신 데이터 로드
+    await loadDate(0);
+
+    // 이벤트 바인딩
+    bindEvents();
+  } catch (e) {
+    console.error('init error:', e);
     document.getElementById('table-container').innerHTML =
-      '<p class="no-data">데이터가 없습니다. GitHub Actions가 실행되면 데이터가 추가됩니다.</p>';
-    return;
+      `<p class="no-data">로드 실패: ${e.message}</p>`;
   }
-
-  // 날짜 드롭다운 구성
-  buildDateSelector();
-
-  // 최신 데이터 로드
-  await loadDate(0);
-
-  // 이벤트 바인딩
-  bindEvents();
 }
 
 function buildDateSelector() {

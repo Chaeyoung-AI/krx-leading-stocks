@@ -7,8 +7,14 @@ const cache = new Map();
 
 function getBaseUrl() {
   const loc = window.location;
-  // GitHub Pages or local
-  return loc.origin + loc.pathname.replace(/\/[^/]*$/, '');
+  // Remove trailing slash and filename (e.g. index.html)
+  let path = loc.pathname;
+  // If path ends with / keep it as the directory, otherwise strip filename
+  if (!path.endsWith('/')) {
+    path = path.replace(/\/[^/]*$/, '/');
+  }
+  // Remove trailing slash for clean URL joining
+  return loc.origin + path.replace(/\/$/, '');
 }
 
 export async function fetchIndex() {
