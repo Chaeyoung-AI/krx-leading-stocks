@@ -219,6 +219,8 @@ function bindTableEvents(market, recentData, searchQuery) {
   document.querySelectorAll('.note-input').forEach(textarea => {
     textarea.addEventListener('blur', () => {
       setNote(textarea.dataset.ticker, textarea.value);
+      const stocks = window.__currentStocks;
+      if (stocks) renderTable(stocks, market, recentData, searchQuery);
     });
     textarea.addEventListener('click', e => e.stopPropagation());
   });
