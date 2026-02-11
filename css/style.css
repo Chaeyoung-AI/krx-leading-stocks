@@ -275,6 +275,11 @@ header h1 {
   color: #fff;
 }
 
+.badge-memo-new {
+  background: #10b981;
+  color: #fff;
+}
+
 /* === Tags === */
 .tag {
   display: inline-block;

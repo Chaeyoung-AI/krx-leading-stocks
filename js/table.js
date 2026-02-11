@@ -4,7 +4,7 @@
  */
 
 import { formatTradingValue, formatPrice, formatVolume, formatChangePct, getChangeClass } from './format.js';
-import { getMemo, setNote, addTag, removeTag } from './memo.js';
+import { getMemo, setNote, addTag, removeTag, isMemoNew } from './memo.js';
 import { getTickerHistory, isNew, getStreakCount, renderHistoryMini } from './history.js';
 
 let currentSort = { column: 'rank', asc: true };
@@ -103,6 +103,9 @@ function renderRow(stock, memo, isNewEntry, streak) {
   }
   if (memo.note) {
     tags += ' <span class="has-note" title="' + escapeHtml(memo.note) + '">📝</span>';
+  }
+  if (isMemoNew(memo)) {
+    tags += ' <span class="badge badge-memo-new">NEW</span>';
   }
 
   return `<tr class="stock-row ${isExpanded ? 'expanded' : ''}" data-ticker="${stock.ticker}">

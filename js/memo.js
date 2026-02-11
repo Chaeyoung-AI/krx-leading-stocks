@@ -21,6 +21,7 @@ export function getMemo(ticker) {
 
 export function setMemo(ticker, memo) {
   const all = loadAll();
+  if (!memo.updatedAt) memo.updatedAt = new Date().toISOString();
   all[ticker] = memo;
   saveAll(all);
 }
@@ -39,6 +40,7 @@ export function addTag(ticker, tag) {
   const memo = getMemo(ticker);
   if (!memo.tags.includes(tag)) {
     memo.tags.push(tag);
+    memo.updatedAt = new Date().toISOString();
     setMemo(ticker, memo);
   }
 }
@@ -52,7 +54,15 @@ export function removeTag(ticker, tag) {
 export function setNote(ticker, note) {
   const memo = getMemo(ticker);
   memo.note = note;
+  memo.updatedAt = new Date().toISOString();
   setMemo(ticker, memo);
+}
+
+export function isMemoNew(memo) {
+  if (!memo.updatedAt) return false;
+  const updated = new Date(memo.updatedAt);
+  const now = new Date();
+  return (now - updated) < 24 * 60 * 60 * 1000;
 }
 
 export function getAllTags() {
