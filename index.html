@@ -54,16 +54,6 @@
     </div>
   </div>
 
-  <script>
-    window.addEventListener('error', e => {
-      document.getElementById('table-container').innerHTML =
-        '<pre style="color:red">ERROR: ' + e.message + '\n' + (e.filename||'') + ':' + (e.lineno||'') + '</pre>';
-    });
-    window.addEventListener('unhandledrejection', e => {
-      document.getElementById('table-container').innerHTML =
-        '<pre style="color:red">PROMISE ERROR: ' + e.reason + '</pre>';
-    });
-  </script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
